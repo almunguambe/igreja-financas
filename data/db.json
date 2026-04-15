@@ -1,0 +1,257 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "nome": "Administrador",
+      "username": "admin",
+      "senha_hash": "$2a$10$cVoYN.gL4fy3HOvgMXVWdOKGcABCDaSGckQo3FX4kEFiaCnKeP/me",
+      "perfil": "admin",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Tesoureiro",
+      "username": "tesoureiro",
+      "senha_hash": "$2a$10$cVoYN.gL4fy3HOvgMXVWdOKGcABCDaSGckQo3FX4kEFiaCnKeP/me",
+      "perfil": "tesoureiro",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Consulta",
+      "username": "visualizador",
+      "senha_hash": "$2a$10$cVoYN.gL4fy3HOvgMXVWdOKGcABCDaSGckQo3FX4kEFiaCnKeP/me",
+      "perfil": "visualizador",
+      "ativo": true
+    }
+  ],
+  "departamentos": [
+    {
+      "id": 1,
+      "nome": "Juventude",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Activista",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Boa Esperança",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "nome": "Mulheres",
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "nome": "Igreja Mãe",
+      "ativo": true
+    },
+    {
+      "id": 6,
+      "nome": "Igreja em Geral",
+      "ativo": true
+    },
+    {
+      "id": 7,
+      "nome": "Homem",
+      "ativo": true
+    },
+    {
+      "id": 8,
+      "nome": "Missões",
+      "ativo": true
+    },
+    {
+      "id": 9,
+      "nome": "Construção",
+      "ativo": true
+    }
+  ],
+  "zonas": [
+    {
+      "id": 1,
+      "nome": "Chicuque",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Gunja",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Livenga",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "nome": "Nhabanda",
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "nome": "Nhambiho 3",
+      "ativo": true
+    },
+    {
+      "id": 6,
+      "nome": "Pale",
+      "ativo": true
+    }
+  ],
+  "propositos_entrada": [
+    {
+      "id": 1,
+      "nome": "Agradecimento",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Coleta",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Construção",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "nome": "Dízimo",
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "nome": "Mão de Sentimento",
+      "ativo": true
+    },
+    {
+      "id": 6,
+      "nome": "Outros",
+      "ativo": true
+    }
+  ],
+  "propositos_saida": [
+    {
+      "id": 1,
+      "nome": "Água",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Alimentação",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Comunicação",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "nome": "Construção",
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "nome": "Iluminação",
+      "ativo": true
+    },
+    {
+      "id": 6,
+      "nome": "Internet",
+      "ativo": true
+    },
+    {
+      "id": 7,
+      "nome": "Material",
+      "ativo": true
+    },
+    {
+      "id": 8,
+      "nome": "Mobília",
+      "ativo": true
+    },
+    {
+      "id": 9,
+      "nome": "Santa Ceia",
+      "ativo": true
+    },
+    {
+      "id": 10,
+      "nome": "Serviços",
+      "ativo": true
+    },
+    {
+      "id": 11,
+      "nome": "Viagem",
+      "ativo": true
+    },
+    {
+      "id": 12,
+      "nome": "Vogal",
+      "ativo": true
+    },
+    {
+      "id": 13,
+      "nome": "Utensílios",
+      "ativo": true
+    },
+    {
+      "id": 14,
+      "nome": "Higiene",
+      "ativo": true
+    },
+    {
+      "id": 15,
+      "nome": "Equipamento",
+      "ativo": true
+    },
+    {
+      "id": 16,
+      "nome": "Manutenção",
+      "ativo": true
+    }
+  ],
+  "linhas_pagamento": [
+    {
+      "id": 1,
+      "nome": "Coleta",
+      "ativo": true
+    },
+    {
+      "id": 2,
+      "nome": "Dízimo",
+      "ativo": true
+    },
+    {
+      "id": 3,
+      "nome": "Agradecimento",
+      "ativo": true
+    },
+    {
+      "id": 4,
+      "nome": "Construção",
+      "ativo": true
+    },
+    {
+      "id": 5,
+      "nome": "Outros",
+      "ativo": true
+    }
+  ],
+  "configuracoes_financeiras": [
+    {
+      "id": 1,
+      "ano": 2026,
+      "transporte_banco": 9500,
+      "transporte_caixa": 300
+    }
+  ],
+  "lancamentos": []
+}

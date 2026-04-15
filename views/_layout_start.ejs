@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="/images/logo.jpg" alt="Logo Igreja" class="brand-logo">
+      <div>
+        <h2>Assembleia de Deus</h2>
+        <p>Finanças da Igreja</p>
+      </div>
+    </div>
+
+    <% if (user) { %>
+      <div class="user-box">
+        <strong><%= user.nome %></strong>
+        <span><%= user.perfil %></span>
+      </div>
+
+      <nav class="menu">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/lancamentos">Lançamentos</a>
+        <a href="/relatorios">Relatórios</a>
+
+        <% if (user.perfil === 'admin') { %>
+          <a href="/cadastros">Cadastros</a>
+          <a href="/configuracoes">Configurações</a>
+          <a href="/usuarios">Usuários</a>
+        <% } %>
+
+        <a href="/logout" class="logout-link">Sair</a>
+      </nav>
+    <% } %>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <h1><%= title %></h1>
+        <p class="subtitle">Sistema Financeiro da Igreja</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash <%= flash.tipo %>"><%= flash.texto %></div>
+      <% } %>

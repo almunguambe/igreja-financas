@@ -1,0 +1,108 @@
+<%- include('_layout_start', { title: 'Lançamentos', user, flash }) %>
+<div class="card">
+  <h2><%= editing ? 'Editar Lançamento' : 'Novo Lançamento' %></h2>
+  <form method="post" action="<%= editing ? '/lancamentos/' + editing.id + '/editar' : '/lancamentos' %>">
+    <div class="row">
+      <div><label>Data</label><input type="date" name="data" value="<%= editing ? editing.data : '' %>" required></div>
+      <div><label>Mês</label><select name="mes" required>
+        <% ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].forEach(m => { %>
+          <option value="<%= m %>" <%= editing && editing.mes === m ? 'selected' : '' %>><%= m %></option>
+        <% }) %>
+      </select></div>
+      <div><label>Tipo de Movimento</label><select name="tipo_movimento" id="tipo_movimento" required>
+        <% ['Entrada','Saida','Transporte'].forEach(t => { %><option value="<%= t %>" <%= editing && editing.tipo_movimento === t ? 'selected' : '' %>><%= t %></option><% }) %>
+      </select></div>
+      <div><label>Local de Movimento</label><select name="local_movimento" id="local_movimento" required>
+        <% ['Banco','Caixa'].forEach(l => { %><option value="<%= l %>" <%= editing && editing.local_movimento === l ? 'selected' : '' %>><%= l %></option><% }) %>
+      </select></div>
+    </div>
+    <div class="row">
+      <div><label>Departamento</label><select name="departamento_id" required>
+        <option value="">Selecione</option>
+        <% formData.departamentos.forEach(item => { %><option value="<%= item.id %>" <%= editing && editing.departamento_id === item.id ? 'selected' : '' %>><%= item.nome %></option><% }) %>
+      </select></div>
+      <div><label>Zona</label><select name="zona_id"><option value="">Selecione</option>
+        <% formData.zonas.forEach(item => { %><option value="<%= item.id %>" <%= editing && editing.zona_id === item.id ? 'selected' : '' %>><%= item.nome %></option><% }) %>
+      </select></div>
+      <div id="bloco_entrada"><label>Propósito de Entrada</label><select name="proposito_entrada_id"><option value="">Selecione</option>
+        <% formData.entradas.forEach(item => { %><option value="<%= item.id %>" <%= editing && editing.proposito_entrada_id === item.id ? 'selected' : '' %>><%= item.nome %></option><% }) %>
+      </select></div>
+      <div id="bloco_saida"><label>Propósito de Saída</label><select name="proposito_saida_id"><option value="">Selecione</option>
+        <% formData.saidas.forEach(item => { %><option value="<%= item.id %>" <%= editing && editing.proposito_saida_id === item.id ? 'selected' : '' %>><%= item.nome %></option><% }) %>
+      </select></div>
+    </div>
+    <div class="row">
+      <div><label>Linha de Pagamento</label><select name="linha_pagamento_id"><option value="">Selecione</option>
+        <% formData.linhas.forEach(item => { %><option value="<%= item.id %>" <%= editing && editing.linha_pagamento_id === item.id ? 'selected' : '' %>><%= item.nome %></option><% }) %>
+      </select></div>
+      <div><label>Número de Requisição</label><input name="numero_requisicao" value="<%= editing ? editing.numero_requisicao : '' %>"></div>
+      <div id="bloco_cheque"><label>Nº de Cheque</label><input name="numero_cheque" value="<%= editing ? editing.numero_cheque : '' %>"></div>
+      <div id="bloco_talao"><label>Nº de Talão</label><input name="numero_talao" value="<%= editing ? editing.numero_talao : '' %>"></div>
+    </div>
+    <div class="row">
+      <div><label>Quantidade</label><input type="number" step="0.01" name="quantidade" id="quantidade" value="<%= editing ? editing.quantidade : 1 %>"></div>
+      <div><label>Valor Unitário</label><input type="number" step="0.01" name="valor_unitario" id="valor_unitario" value="<%= editing ? editing.valor_unitario : 0 %>"></div>
+      <div><label>Valor Total</label><input type="number" step="0.01" name="valor_total" id="valor_total" value="<%= editing ? editing.valor_total : 0 %>" required></div>
+      <div><label>Especifique</label><textarea name="especificacao"><%= editing ? editing.especificacao : '' %></textarea></div>
+    </div>
+    <div class="actions">
+      <button type="submit"><%= editing ? 'Atualizar' : 'Guardar' %></button>
+      <% if (editing) { %><a href="/lancamentos"><button type="button" class="secondary">Cancelar</button></a><% } %>
+    </div>
+  </form>
+</div>
+<div class="card">
+  <h2>Lista de Lançamentos</h2>
+  <table>
+    <thead>
+      <tr><th>Data</th><th>Mês</th><th>Tipo</th><th>Local</th><th>Departamento</th><th>Zona</th><th>Valor</th><th>Usuário</th><th>Ações</th></tr>
+    </thead>
+    <tbody>
+      <% rows.forEach(item => { %>
+      <tr>
+        <td><%= item.data %></td>
+        <td><%= item.mes %></td>
+        <td><%= item.tipo_movimento %></td>
+        <td><%= item.local_movimento %></td>
+        <td><%= item.departamento %></td>
+        <td><%= item.zona || '-' %></td>
+        <td><%= Number(item.valor_total).toLocaleString('pt-MZ') %></td>
+        <td><%= item.usuario %></td>
+        <td>
+          <div class="actions">
+            <% if (user.perfil !== 'visualizador') { %>
+            <a href="/lancamentos/<%= item.id %>/editar"><button type="button" class="secondary">Editar</button></a>
+            <% } %>
+            <% if (user.perfil === 'admin') { %>
+            <form method="post" action="/lancamentos/<%= item.id %>/apagar" onsubmit="return confirm('Apagar este lançamento?')">
+              <button type="submit" class="danger">Apagar</button>
+            </form>
+            <% } %>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<script>
+  function atualizarCampos() {
+    const tipo = document.getElementById('tipo_movimento').value;
+    const local = document.getElementById('local_movimento').value;
+    document.getElementById('bloco_entrada').style.display = tipo === 'Entrada' ? 'block' : 'none';
+    document.getElementById('bloco_saida').style.display = tipo === 'Saida' ? 'block' : 'none';
+    document.getElementById('bloco_cheque').style.display = local === 'Banco' ? 'block' : 'none';
+    document.getElementById('bloco_talao').style.display = local === 'Banco' ? 'block' : 'none';
+  }
+  function calcularTotal() {
+    const q = Number(document.getElementById('quantidade').value || 0);
+    const vu = Number(document.getElementById('valor_unitario').value || 0);
+    document.getElementById('valor_total').value = (q * vu).toFixed(2);
+  }
+  document.getElementById('tipo_movimento').addEventListener('change', atualizarCampos);
+  document.getElementById('local_movimento').addEventListener('change', atualizarCampos);
+  document.getElementById('quantidade').addEventListener('input', calcularTotal);
+  document.getElementById('valor_unitario').addEventListener('input', calcularTotal);
+  atualizarCampos();
+</script>
+<%- include('_layout_end') %>

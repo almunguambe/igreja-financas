@@ -1,0 +1,22 @@
+<%- include('_layout_start', { title: 'Cadastros', user, flash }) %>
+<div class="grid">
+  <% const blocos = [
+    ['departamentos','Departamentos',departamentos],
+    ['zonas','Zonas',zonas],
+    ['entradas','Propósitos de Entrada',entradas],
+    ['saidas','Propósitos de Saída',saidas],
+    ['linhas','Linhas de Pagamento',linhas]
+  ]; blocos.forEach(([slug, titulo, lista]) => { %>
+  <div class="card">
+    <h3><%= titulo %></h3>
+    <form method="post" action="/cadastros/<%= slug %>">
+      <input name="nome" placeholder="Novo item" required>
+      <button type="submit">Adicionar</button>
+    </form>
+    <ul class="list-clean">
+      <% lista.forEach(item => { %><li><%= item.nome %></li><% }) %>
+    </ul>
+  </div>
+  <% }) %>
+</div>
+<%- include('_layout_end') %>

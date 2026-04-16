@@ -1,0 +1,87 @@
+<%- include('_layout_start', { title: 'Dashboard', user, flash }) %>
+<div class="card">
+  <div class="row row-actions">
+    <div>
+      <h2>Resumo Financeiro <span class="badge">Ano <%= ano %></span></h2>
+      <p class="small muted">Visão rápida de Banco, Caixa e saldo real da igreja.</p>
+    </div>
+    <form method="get" action="/dashboard" class="inline-form compact-form">
+      <div>
+        <label>Ano</label>
+        <input type="number" name="ano" value="<%= ano %>">
+      </div>
+      <div class="actions align-end">
+        <button type="submit">Atualizar</button>
+      </div>
+    </form>
+  </div>
+  <div class="grid">
+    <div class="kpi"><h3>Transporte Banco</h3><p><%= resumo.transporte_banco.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Entrada Banco</h3><p><%= resumo.entrada_banco.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saída Banco</h3><p><%= resumo.saida_banco.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saldo Banco</h3><p><%= resumo.saldo_banco.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Transporte Caixa</h3><p><%= resumo.transporte_caixa.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Entrada Caixa</h3><p><%= resumo.entrada_caixa.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saída Caixa</h3><p><%= resumo.saida_caixa.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saldo Caixa</h3><p><%= resumo.saldo_caixa.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saldo Total</h3><p><%= resumo.saldo_total.toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saídas Totais</h3><p><%= resumo.saidas_totais.toLocaleString('pt-MZ') %></p></div>
+  </div>
+</div>
+
+<div class="card-grid two-up">
+  <div class="card">
+    <h2>Gráfico de Movimento</h2>
+    <p class="small muted">Comparação entre entradas e saídas por local.</p>
+    <% chartMovimento.forEach(item => { %>
+      <div class="bar-row">
+        <div class="bar-label"><%= item.nome %></div>
+        <div class="bar-track"><div class="bar-fill" style="width:<%= item.largura %>%"></div></div>
+        <div class="bar-value"><%= Number(item.total).toLocaleString('pt-MZ') %></div>
+      </div>
+    <% }) %>
+  </div>
+  <div class="card">
+    <h2>Gráfico Mensal</h2>
+    <p class="small muted">Entradas e saídas ao longo do ano.</p>
+    <% chartMensal.forEach(item => { %>
+      <div class="month-row">
+        <div class="month-name"><%= item.nome %></div>
+        <div class="month-bars">
+          <div class="mini-track"><div class="mini-fill entrada" style="width:<%= item.larguraEntradas %>%"></div></div>
+          <div class="mini-track"><div class="mini-fill saida" style="width:<%= item.larguraSaidas %>%"></div></div>
+        </div>
+      </div>
+    <% }) %>
+    <div class="legend">
+      <span><i class="legend-dot entrada"></i> Entradas</span>
+      <span><i class="legend-dot saida"></i> Saídas</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Últimos Lançamentos</h2>
+  <table>
+    <thead>
+      <tr><th>Data</th><th>Tipo</th><th>Local</th><th>Departamento</th><th>Zona</th><th>Propósito</th><th>Valor</th></tr>
+    </thead>
+    <tbody>
+      <% if (!ultimos.length) { %>
+        <tr><td colspan="7">Ainda não há lançamentos registados.</td></tr>
+      <% } %>
+      <% ultimos.forEach(item => { %>
+      <tr>
+        <td><%= item.data %></td>
+        <td><%= item.tipo_movimento %></td>
+        <td><%= item.local_movimento %></td>
+        <td><%= item.departamento %></td>
+        <td><%= item.zona || '-' %></td>
+        <td><%= item.proposito || '-' %></td>
+        <td><%= Number(item.valor_total).toLocaleString('pt-MZ') %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('_layout_end') %>

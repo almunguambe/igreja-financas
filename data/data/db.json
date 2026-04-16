@@ -4,7 +4,7 @@
       "id": 1,
       "nome": "Administrador",
       "username": "admin",
-      "senha_hash": "$2a$10$MmH5wssFqYrJmMWTg77g.ORvl4iw.5nrAV.9ykCZgqr6aUxm9iQ8K",
+      "senha_hash": "$2a$10$cVoYN.gL4fy3HOvgMXVWdOKGcABCDaSGckQo3FX4kEFiaCnKeP/me",
       "perfil": "admin",
       "ativo": true
     },

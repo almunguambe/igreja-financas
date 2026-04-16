@@ -1,0 +1,192 @@
+<%- include('_layout_start', { title: 'Relatórios', user, flash }) %>
+
+<div class="card">
+  <div class="row row-actions">
+    <div>
+      <h2>Relatórios Financeiros <span class="badge">Ano <%= ano %><%= mes ? ' | ' + mes : '' %></span></h2>
+      <p class="small muted">Resumo completo de Banco, Caixa, departamentos e despesas do período.</p>
+    </div>
+
+    <form method="get" action="/relatorios" class="inline-form compact-form">
+      <div>
+        <label>Ano</label>
+        <input type="number" name="ano" value="<%= ano %>">
+      </div>
+
+      <div>
+        <label>Mês</label>
+        <select name="mes">
+          <option value="">Todos</option>
+          <option value="Janeiro" <%= mes === 'Janeiro' ? 'selected' : '' %>>Janeiro</option>
+          <option value="Fevereiro" <%= mes === 'Fevereiro' ? 'selected' : '' %>>Fevereiro</option>
+          <option value="Março" <%= mes === 'Março' ? 'selected' : '' %>>Março</option>
+          <option value="Abril" <%= mes === 'Abril' ? 'selected' : '' %>>Abril</option>
+          <option value="Maio" <%= mes === 'Maio' ? 'selected' : '' %>>Maio</option>
+          <option value="Junho" <%= mes === 'Junho' ? 'selected' : '' %>>Junho</option>
+          <option value="Julho" <%= mes === 'Julho' ? 'selected' : '' %>>Julho</option>
+          <option value="Agosto" <%= mes === 'Agosto' ? 'selected' : '' %>>Agosto</option>
+          <option value="Setembro" <%= mes === 'Setembro' ? 'selected' : '' %>>Setembro</option>
+          <option value="Outubro" <%= mes === 'Outubro' ? 'selected' : '' %>>Outubro</option>
+          <option value="Novembro" <%= mes === 'Novembro' ? 'selected' : '' %>>Novembro</option>
+          <option value="Dezembro" <%= mes === 'Dezembro' ? 'selected' : '' %>>Dezembro</option>
+        </select>
+      </div>
+
+      <div class="actions align-end">
+        <button type="submit">Atualizar</button>
+        <a class="btn secondary" href="/relatorios/exportar.csv?ano=<%= ano %><%= mes ? '&mes=' + encodeURIComponent(mes) : '' %>">CSV</a>
+        <a class="btn secondary" href="/relatorios/exportar.xls?ano=<%= ano %><%= mes ? '&mes=' + encodeURIComponent(mes) : '' %>">Excel</a>
+        <a class="btn secondary" target="_blank" href="/relatorios/imprimir?ano=<%= ano %><%= mes ? '&mes=' + encodeURIComponent(mes) : '' %>">PDF</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="grid">
+    <div class="kpi"><h3>Transporte Banco</h3><p><%= Number(resumo.transporte_banco || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Entrada Banco</h3><p><%= Number(resumo.entrada_banco || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saída Banco</h3><p><%= Number(resumo.saida_banco || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saldo Banco</h3><p><%= Number(resumo.saldo_banco || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Transporte Caixa</h3><p><%= Number(resumo.transporte_caixa || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Entrada Caixa</h3><p><%= Number(resumo.entrada_caixa || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saída Caixa</h3><p><%= Number(resumo.saida_caixa || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saldo Caixa</h3><p><%= Number(resumo.saldo_caixa || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saldo Total</h3><p><%= Number(resumo.saldo_total || 0).toLocaleString('pt-MZ') %></p></div>
+    <div class="kpi"><h3>Saídas Totais</h3><p><%= Number(resumo.saidas_totais || 0).toLocaleString('pt-MZ') %></p></div>
+  </div>
+</div>
+
+<div class="card-grid two-up">
+  <div class="card">
+    <h2>Gráfico por Departamento</h2>
+    <p class="small muted">Os 8 departamentos com mais movimento no período.</p>
+
+    <% if (!chartDepartamento || !chartDepartamento.length) { %>
+      <p class="small muted">Sem dados para mostrar.</p>
+    <% } %>
+
+    <% (chartDepartamento || []).forEach(item => { %>
+      <div class="bar-row">
+        <div class="bar-label"><%= item.nome %></div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:<%= item.largura %>%"></div>
+        </div>
+        <div class="bar-value"><%= Number(item.total).toLocaleString('pt-MZ') %></div>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="card">
+    <h2>Gráfico de Movimento</h2>
+    <p class="small muted">Comparação entre entradas e saídas por local.</p>
+
+    <% if (!chartMovimento || !chartMovimento.length) { %>
+      <p class="small muted">Sem dados para mostrar.</p>
+    <% } %>
+
+    <% (chartMovimento || []).forEach(item => { %>
+      <div class="bar-row">
+        <div class="bar-label"><%= item.nome %></div>
+        <div class="bar-track">
+          <div class="bar-fill alt" style="width:<%= item.largura %>%"></div>
+        </div>
+        <div class="bar-value"><%= Number(item.total).toLocaleString('pt-MZ') %></div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Movimento por Departamento</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Departamento</th>
+        <th>Transp. Banco</th>
+        <th>Entrada Banco</th>
+        <th>Saída Banco</th>
+        <th>Transp. Caixa</th>
+        <th>Entrada Caixa</th>
+        <th>Saída Caixa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (!porDepartamento || !porDepartamento.length) { %>
+        <tr><td colspan="7">Sem dados no período.</td></tr>
+      <% } %>
+
+      <% (porDepartamento || []).forEach(item => { %>
+        <tr>
+          <td><%= item.nome %></td>
+          <td><%= Number(item.transporte_banco || 0).toLocaleString('pt-MZ') %></td>
+          <td><%= Number(item.entrada_banco || 0).toLocaleString('pt-MZ') %></td>
+          <td><%= Number(item.saida_banco || 0).toLocaleString('pt-MZ') %></td>
+          <td><%= Number(item.transporte_caixa || 0).toLocaleString('pt-MZ') %></td>
+          <td><%= Number(item.entrada_caixa || 0).toLocaleString('pt-MZ') %></td>
+          <td><%= Number(item.saida_caixa || 0).toLocaleString('pt-MZ') %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<div class="card-grid two-up">
+  <div class="card">
+    <h2>Despesas por Tipo</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Propósito de Saída</th>
+          <th>Valor Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!despesas || !despesas.length) { %>
+          <tr><td colspan="2">Sem despesas no período.</td></tr>
+        <% } %>
+
+        <% (despesas || []).forEach(item => { %>
+          <tr>
+            <td><%= item.nome %></td>
+            <td><%= Number(item.total || 0).toLocaleString('pt-MZ') %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Movimentos do Período</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tipo</th>
+          <th>Local</th>
+          <th>Departamento</th>
+          <th>Zona</th>
+          <th>Propósito</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!rows || !rows.length) { %>
+          <tr><td colspan="7">Sem lançamentos no período.</td></tr>
+        <% } %>
+
+        <% (rows || []).forEach(item => { %>
+          <tr>
+            <td><%= item.data %></td>
+            <td><%= item.tipo_movimento %></td>
+            <td><%= item.local_movimento %></td>
+            <td><%= item.departamento %></td>
+            <td><%= item.zona || '-' %></td>
+            <td><%= item.proposito || '-' %></td>
+            <td><%= Number(item.valor_total || 0).toLocaleString('pt-MZ') %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('_layout_end') %>

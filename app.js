@@ -1,8 +1,15 @@
 const express = require('express');
 const session = require('express-session');
+
 const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
+
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB ligado'))
+  .catch(err => console.error('Erro MongoDB:', err));
 
 const app = express();
 const PORT = process.env.PORT || 3000;

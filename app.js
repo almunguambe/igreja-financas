@@ -7,6 +7,8 @@ const fs = require('fs');
 
 const mongoose = require('mongoose');
 
+console.log("A tentar ligar MongoDB...");
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB ligado'))
   .catch(err => console.error('Erro MongoDB:', err));
